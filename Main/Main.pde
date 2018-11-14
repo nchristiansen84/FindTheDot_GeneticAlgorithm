@@ -1,6 +1,7 @@
 Population persons;
 Goal goal;
 Barriers barriers;
+boolean isPaused = false;
 
 void setup(){
   size(800, 800);
@@ -19,24 +20,35 @@ void setup(){
 }
 
 void draw(){
-  background(255);
-  PFont f = createFont("Arial", 16, true);
+  if(!isPaused){
+    background(255);
+    PFont f = createFont("Arial", 16, true);
+      
+    goal.show();
+    barriers.show();
     
-  goal.show();
-  barriers.show();
-  
-  if(persons.allPersonsDead()){
-    // Genetic Algorithm
-    persons.calcFitness();
-    persons.naturalSelection();
-    persons.mutate();
-  }else{
-    persons.update();
-    persons.show();
+    if(persons.allPersonsDead()){
+      // Genetic Algorithm
+      persons.calcFitness();
+      persons.naturalSelection();
+      persons.mutate();
+    }else{
+      persons.update();
+      persons.show();
+    }
+    
+    textFont(f, 40);
+    fill(100, 100, 100);
+    text("Gen: "+persons.gen, 10, 40);
+    text("Steps: "+persons.minSteps, 10, 80);
   }
-  
-  textFont(f, 40);
-  fill(100, 100, 100);
-  text("Gen: "+persons.gen, 10, 40);
-  text("Steps: "+persons.minSteps, 10, 80);
+}
+
+//--------------------------------------------------------
+void keyPressed(){
+  switch(key){
+  case 'p': // Toogle Pause
+    isPaused = !isPaused;
+    break;
+  }
 }
